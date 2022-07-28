@@ -117,7 +117,3 @@ src/com/example
 Now, many teams that claim to use a layered architecture are actually using a hexagonal architecture. This is because many projects use some form of dependency injection. It's not that dependency injection is inherently a hexagonal architecture, but that architectures that use dependency injection naturally have a port and adapter style.
 
 If we intentionally magnify the difference between the left and right sides, which is deliberately ignored in the hexagonal architecture, and separate the hexagons from the middle, then you will find that the separated hexagonal architecture and the layered architecture using dependency injection are very similar. The main difference between the hexagonal architecture and the layered architecture is that the hexagonal architecture mainly focuses on the outer area and the inner area, and stipulates that the code related to the "inside" cannot be leaked to the "outside" to achieve external replaceability.
-
-## What's the usage of knowing those？
-
-Knowing this seems to only make one understand why this architecture is called a hexagonal architecture, but the point is that understanding these helps you distinguish between layered architecture, onion architecture, port and adapter architecture, hexagonal architecture, and subtle differences. Their concerns, so as to choose the appropriate architecture or tailor the architecture according to the situation of your project.
