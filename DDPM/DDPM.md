@@ -111,43 +111,33 @@
 ### Training
 
 我们可以将DDPM的Training对应到扩散过程(Diffusion Process)。现在我们先主要关注第五行的公式：
-$$
-\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)||^2
-$$
+
+$$\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)||^2$$
 
 公式中的
-$$
-\epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t) 
-$$
+$$\epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)$$
+
 表示的是噪声预测器
-- 第一个参数 $\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon$ 代表加噪后的图片$x_t$，所以$x_t=\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon$
-- 第二个参数$t$就是步数。
+- 第一个参数 $\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon$ 代表加噪后的图片 $x_t$，所以 $x_t=\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon$
+- 第二个参数 $t$就是步数。
 
 如下图所示：
 
 <img src="./images/DDPM-加噪和去噪的过程-1.drawio.png"/>
 
 而公式中：
-$$
-||\epsilon - \epsilon_\theta(\sqrt{\overline{a}}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)||^2
-$$
+$$||\epsilon - \epsilon_\theta(\sqrt{\overline{a}}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)||^2$$
 
-表示模型估计的噪声$\epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)$和实际噪声$\epsilon$之间的均方误差（MSE)，如下图:
+表示模型估计的噪声 $\epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)$ 和实际噪声 $\epsilon$ 之间的均方误差（MSE)，如下图:
 
 <img src="./images/DDPM-加噪和去噪的过程-2.drawio.png"/>
 
 整个公式:
-$$
-\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)||^2
-$$
-表示是神经网络在反向传播中通过梯度下降算法更新模型参数$\theta$，以使得模型估计的噪声$\epsilon_\theta$ 更加接近实际噪声$\theta$。这通过最小化噪声估计的误差来实现，从而提高模型在去噪过程中的表现。
 
-但是公式中的$\overline{a}_t$是什么？
+$$\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)||^2$$
 
-<!-- - 第一行repeat和第六行until converged，要表达的就是重复执行中间过程，直到收敛(converged）
-- $x_0 \sim q(x_0)$ 代表从训练数据中抽取一张图片记作$x_0$
-- $t \sim Uniform({1, ..., T})$
-- $\epsilon \sim N(0,I)$
--  -->
+表示是神经网络在反向传播中通过梯度下降算法更新模型参数 $\theta$，以使得模型估计的噪声 $\epsilon_\theta$ 更加接近实际噪声 $\theta$。这通过最小化噪声估计的误差来实现，从而提高模型在去噪过程中的表现。
+
+但是公式中的 $\overline{a}_t$是什么？
 
 
