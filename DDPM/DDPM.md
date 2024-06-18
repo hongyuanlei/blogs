@@ -153,11 +153,23 @@ $$\sqrt{\beta}\times\epsilon + \sqrt{1-\beta} \times x$$
 
 $$x_t = \sqrt{\beta_t} \times \epsilon + \sqrt{1-\beta_t} \times x_{t-1}$$
 
-其中 $x_0$ 为训练时使用的干净的原图。
+其中 $x_0$ 为训练时使用的干净的原图。现在我们引入一个新的变量 $\alpha$ , 并令 $\alpha = 1 - \beta$ ，那么，我们又可以重新表达之前的公式为：
+
+$$x_t = \sqrt{1 - \alpha_t} \times \epsilon + \sqrt{\alpha_t} \times x_{t-1}$$
+
+经过一些列复杂推导，得到：
+
+$$x_t=\sqrt{\overline{\alpha}_t}x_0 + \sqrt{1-\overline{\alpha}_t}\epsilon$$
+
+其中 $\overline{\alpha_t} = \alpha_1 \times \alpha_2 \times ... \times \alpha_{t-1} \times \alpha_t $ ，由于 $\beta$ 是已知的，所以任意时刻的 $\overline{\alpha_t}$ 也是已知的。这个公式得到了一个比较重要的结论就是：任何 $x_t$ 可以之间由原图 $x_0$ 直接生成，如下图所示：
+
+<img src="./images/DDPM-加噪和去噪的过程-1.drawio.png"/>
+
+
 
 现在我们先主要关注第五行的公式：
 
-$$\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)||^2$$
+$$\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{\alpha}_t}x_0 + \sqrt{1-\overline{\alpha}_t}\epsilon, t)||^2$$
 
 公式中的
 $$\epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)$$
