@@ -161,40 +161,28 @@ $$x_t = \sqrt{1 - \alpha_t} \times \epsilon + \sqrt{\alpha_t} \times x_{t-1}$$
 
 $$x_t=\sqrt{\overline{\alpha}_t}x_0 + \sqrt{1-\overline{\alpha}_t}\epsilon$$
 
-其中 $\overline{\alpha_t} = \alpha_1 \times \alpha_2 \times ... \times \alpha_{t-1} \times \alpha_t $ ，由于 $\beta$ 是已知的，所以任意时刻的 $\overline{\alpha_t}$ 也是已知的。这个公式得到了一个比较重要的结论就是：任何 $x_t$ 可以之间由原图 $x_0$ 直接生成，如下图所示：
+其中 $\overline{\alpha_t} = \alpha_1 \times \alpha_2 \times ... \times \alpha_{t-1} \times \alpha_t $ ，由于 $\beta$ 是已知的，所以任意时刻的 $\overline{\alpha_t}$ 也是已知的。这个公式得到了一个比较重要的结论就是：**对于任意 $x_t$ 可以由原图 $x_0$ 直接生成**。如下图所示：
 
 <img src="./images/DDPM-加噪和去噪的过程-1.drawio.png"/>
 
+现在我们已经可以通过 $x_0$ 生成任意时刻的加噪图 $x_t$，那么我们就可以将 $x_t$ 和t作为训练噪声预测器的输入，这里我们使用 $\epsilon_\theta$ 来表示噪声预测器，$\theta$ 表示神经网络的权重参数。那么我可以使用如下公式来表达训练噪声预测器：
 
-
-现在我们先主要关注第五行的公式：
-
-$$\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{\alpha}_t}x_0 + \sqrt{1-\overline{\alpha}_t}\epsilon, t)||^2$$
-
-公式中的
 $$\epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)$$
 
-表示的是噪声预测器
-- 第一个参数 $\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon$ 代表加噪后的图片 $x_t$，所以 $x_t=\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon$
-- 第二个参数 $t$就是步数。
+通过 $\epsilon_\theta$ 之后我们就得到了预测噪声。然后，使用如下公式来计算真实噪声和预测噪声的均方误差(MSE)：
 
-如下图所示：
-
-<img src="./images/DDPM-加噪和去噪的过程-1.drawio.png"/>
-
-而公式中：
 $$||\epsilon - \epsilon_\theta(\sqrt{\overline{a}}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)||^2$$
 
-表示模型估计的噪声 $\epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)$ 和实际噪声 $\epsilon$ 之间的均方误差（MSE)，如下图:
+其过程如下图所示：
 
 <img src="./images/DDPM-加噪和去噪的过程-2.drawio.png"/>
 
-整个公式:
+而如下公式表示是神经网络在反向传播中通过梯度下降算法更新模型参数 $\theta$，以使得模型估计的噪声 $\epsilon_\theta$ 更加接近实际噪声 $\theta$。
 
 $$\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-\overline{a}_t}\epsilon, t)||^2$$
 
-表示是神经网络在反向传播中通过梯度下降算法更新模型参数 $\theta$，以使得模型估计的噪声 $\epsilon_\theta$ 更加接近实际噪声 $\theta$。这通过最小化噪声估计的误差来实现，从而提高模型在去噪过程中的表现。
+### 采样(Sampling)
 
-但是公式中的 $\overline{a}_t$是什么？
+我们可以将DDPM的Sampling对应到去噪过程(Denoise Process)，在去噪过程中，首先我们需要随机采样一个服从正太分布的噪声，使用公式 $X_T \sim N(0, I)$ 来表达。之后使用噪声预测器来预测噪声，使用公式 $\epsilon_\theta(x_t, t)$ 来表达。最后通过如下公式来计算 $x_{t-1}$ :
 
-
+$$x_{t-1} = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{1 - \alpha_t}{\sqrt{1 - \overline{a}_t}}\epsilon_\theta(x_t, t)) + \sigma_t z $$
