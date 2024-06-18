@@ -185,7 +185,7 @@ $$\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-
 
 我们可以将DDPM的Sampling对应到去噪过程(Denoise Process)，在去噪过程中，首先我们需要随机采样一个服从正太分布的噪声，使用公式 $X_T \sim N(0, I)$ 来表达。之后使用噪声预测器来预测噪声，使用公式 $\epsilon_\theta(x_t, t)$ 来表达。最后通过如下公式来计算 $x_{t-1}$ :
 
-$$x_{t-1} = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{1 - \alpha_t}{\sqrt{1 - \overline{\alpha}_t}}\epsilon_\theta(x_t, t)) + \sigma_t z$$
+$$x_{t-1} = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{1 - \alpha_t}{\sqrt{1 - \overline{\alpha_t}}}\epsilon_\theta(x_t, t)) + \sigma_t z$$
 
 其中 $\sigma_t$ 定义：
 
