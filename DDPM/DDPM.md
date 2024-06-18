@@ -151,7 +151,7 @@ $$\sqrt{\beta}\times\epsilon + \sqrt{1-\beta} \times x$$
 
 通过引入T后，我们可以重新表达之前的公式为：
 
-$$x_t = \sqrt{\beta}_t\times\epsilon + \sqrt{1-\beta}_t \times x_{t-1}$$
+$$x_t = \sqrt{\beta_t} \times \epsilon + \sqrt{1-\beta_t} \times x_{t-1}$$
 
 其中 $x_0$ 为训练时使用的干净的原图。
 
