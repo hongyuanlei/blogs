@@ -187,6 +187,6 @@ $$\nabla_\theta ||\epsilon - \epsilon_\theta(\sqrt{\overline{a}_t}x_0 + \sqrt{1-
 
 $$x_{t-1} = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{1 - \alpha_t}{\sqrt{1 - \overline{\alpha_t}}}\epsilon_\theta(x_t, t)) + \sigma_t z$$
 
-其中 $\sigma_t$ 定义：
+这个公式是如何推导出来的我们后面再说，其中 $z \sim N(0,I)$ ，$\sigma_t$ 定义：
 
 $$\sigma_t = \sqrt{\frac{(1 - \alpha_t)(1 -  \overline{\alpha}_{t - 1})}{ 1 - \overline{\alpha}_t}}$$
