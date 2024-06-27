@@ -16,7 +16,7 @@
 
 <img src="./images/DDMP-RGB.drawio.png"/>
 
-我们可以使用矩阵来表达任意一张RGB图像。下图是一张3x16x16的图像，3代表RGB三个通道：
+我们可以使用矩阵来表达任意一张RGB图像。下图是一张16x16x3的图像，3代表RGB三个通道：
 
 <img src="./images/DDMP-16x16x3_images.drawio.png"/>
 
@@ -36,11 +36,11 @@ DDPM中，生成图像的第一步就是随机采样一个服从标准正态分�
 
 ### 去噪过程(Denoise Process)
 
-噪声图片生成后，会通过一个去噪(Denoise)组件对图片进行去噪，经过去噪的图片相较之前的噪声图片会稍稍变得更像一张正常的图片，如下图：
+假设我们从标准正态分布中采样得到一张64x64x3的噪声图，噪声图片生成后会通过一个去噪(Denoise)组件对图片进行去噪，经过去噪的图片相较之前的噪声图片会稍稍变得更像一张正常的图片，如下图：
 
 <img src="./images/DDPM-Reverse过程-step1.drawio.png"/>
 
-之后重复此过程，我们假设重复次数为1000次，后面我会说明为什么是1000次，经过1000次去噪后，我们得到了一个尺寸为64x64x3的动漫头像。过程如下图：
+之后重复此过程，假设重复次数为1000次（后面我会说明为什么是1000次），经过1000次去噪后，我们得到了一个尺寸为64x64x3的动漫头像。过程如下图：
 
 <img src="./images/DDPM-Reverse过程.drawio.png"/>
 
@@ -165,9 +165,17 @@ $$f(x) = \frac{1}{\sqrt{2\pi\sigma}}e^{[-\frac{x-\mu^2}{2\sigma^2}]}$$
 
 $$N(\mu, \sigma^2)$$
 
+### 正态分布的特性
+
 在DDPM中选择使用正态分布的原因是因为正态分布有很多特性能够使得模型的训练和推理更简单和高效。这里我只列出几个我们后面需要用到的特性：
-- 闭合性： 多个正态分布的线性组合仍然是正态分布。可以表示为 $$ N_1(\mu_1, \sigma_1^2) + N_2(\mu_2, \sigma_2^2)= N_3(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2) $$
-- 重参数化技巧：假设我们有一个正态分布，均值为 $\mu$ ，标准差为 $\sigma$ ，通常情况下我们需要通过采样 $z \thicksim N(\mu, \sigma^2)$ 来生成随机变量 $z$ 。我们通过引入一个标准正态分布的随机变量 $\epsilon \thicksim N(0, 1)$ ，然后用它来生成所需的随机变量 $z = \mu + \sigma\cdot\epsilon$
+
+#### 闭合性
+多个正态分布的线性组合仍然是正态分布。可以表示为:
+$$ N_1(\mu_1, \sigma_1^2) + N_2(\mu_2, \sigma_2^2)= N_3(\mu_1 + \mu_2, \sigma_1^2 + \sigma_2^2) $$
+
+#### 重参数化技巧
+
+假设我们有一个正态分布，均值为 $\mu$ ，标准差为 $\sigma$ ，通常情况下我们需要通过采样 $z \thicksim N(\mu, \sigma^2)$ 来生成随机变量 $z$ 。使用重参数化技巧，我们通过引入一个标准正态分布的随机变量 $\epsilon \thicksim N(0, 1)$ ，然后用它来生成所需的随机变量 $z = \mu + \sigma\cdot\epsilon$
 
 
 
@@ -253,7 +261,4 @@ $$x_{t-1} = \frac{1}{\sqrt{\alpha_t}}(x_t - \frac{1 - \alpha_t}{\sqrt{1 - \overl
 
 $$\sigma_t = \sqrt{\frac{(1 - \alpha_t)(1 -  \overline{\alpha}_{t - 1})}{ 1 - \overline{\alpha}_t}}$$
 
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
-<script type="text/x-mathjax-config">
-        MathJax.Hub.Config({ tex2jax: {inlineMath: [['$', '$']]}, messageStyle: "none" });
-</script>
+
